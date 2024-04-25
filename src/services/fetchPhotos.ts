@@ -13,7 +13,7 @@ const fetchPhotos = async <T>(query: string, page: number): Promise<T> => {
       per_page: 10,
     },
   });
-  console.log(data);
+
   return data;
 };
 
