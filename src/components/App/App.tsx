@@ -1,27 +1,28 @@
 import { useEffect, useState } from "react";
-import SearchBar from "./components/SearchBar/SearchBar";
-import fetchPhotos from "./services/fetchPhotos";
-import Loader from "./components/Loader/Loader";
-import ImageGallery from "./components/ImageGallery/ImageGallery";
-import Error from "./components/Error/Error";
-import Empty from "./components/Empty/Empty";
-import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
-import ImageModal from "./components/ImageModal/ImageModal";
+import SearchBar from "../SearchBar/SearchBar";
+import fetchPhotos from "../../services/fetchPhotos";
+import Loader from "../Loader/Loader";
+import ImageGallery from "../ImageGallery/ImageGallery";
+import Error from "../Error/Error";
+import Empty from "../Empty/Empty";
+import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
+import ImageModal from "../ImageModal/ImageModal";
+import { Image, fetchPhotosResponse } from "./App.types";
 
 function App() {
-  const [images, setImages] = useState([]);
-  const [query, setQuery] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [errorName, setErrorName] = useState("");
-  const [isEmpty, setIsEmpty] = useState(false);
-  const [page, setPage] = useState(1);
-  const [isVisible, setIsVisible] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [modalUrl, setModalUrl] = useState("");
-  const [modalAlt, setModalAlt] = useState("");
+  const [images, setImages] = useState<Image[]>([]);
+  const [query, setQuery] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [errorName, setErrorName] = useState<string>("");
+  const [isEmpty, setIsEmpty] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [modalUrl, setModalUrl] = useState<string>("");
+  const [modalAlt, setModalAlt] = useState<string>("");
 
-  const onSetQueryValue = (queryValue) => {
+  const onSetQueryValue = (queryValue: string) => {
     if (queryValue === query) {
       return;
     }
@@ -40,14 +41,17 @@ function App() {
     const getPhotosByQuery = async () => {
       setIsLoading(true);
       try {
-        const { results, total_pages } = await fetchPhotos(query, page);
+        const { results, total_pages } = await fetchPhotos<fetchPhotosResponse>(
+          query,
+          page
+        );
         if (results.length === 0) {
           setIsEmpty(true);
           return;
         }
         setImages((prevState) => [...prevState, ...results]);
         setIsVisible(page < total_pages);
-      } catch (error) {
+      } catch (error: any) {
         setIsError(true);
         setErrorName(error.message);
       } finally {
@@ -61,7 +65,7 @@ function App() {
     setPage((prevState) => prevState + 1);
   };
 
-  const handleOpen = (url, alt) => {
+  const handleOpen = (url: string, alt: string) => {
     setShowModal(true);
     setModalUrl(url);
     setModalAlt(alt);

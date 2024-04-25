@@ -1,6 +1,13 @@
+import { Image } from "../App/App.types";
 import css from "./ImageCard.module.css";
 
-const ImageCard = ({ picture, handleOpen }) => {
+interface ImageCardProps {
+  picture: Image;
+  handleOpen: (url: string, alt: string) => void;
+}
+
+const ImageCard = ({ picture, handleOpen }: ImageCardProps) => {
+  console.log(picture);
   // при кліку на картинку (div) спрацьовує функція handleOpen в яку ми передаємо посилання на велике зображення і текст опису фото.
   // Ця функція оголошена в App і робить наступне: setShowModal(true); setModalUrl(url); setModalAlt(alt); - викликає сеттери.
   return (
